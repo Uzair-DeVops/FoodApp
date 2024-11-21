@@ -1,0 +1,108 @@
+{% extends 'food/base.html' %}
+
+{% block body %}
+<!-- Check if there are any messages -->
+{% if messages %}
+    {% for message in messages %}
+        <!-- Show the alert box for all types of messages -->
+        <div id="alert-box" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Hello {{ request.session.username }}!</strong>
+            <span class="block sm:inline">{{ message }}</span>
+            <button type="button" class="absolute top-0 right-0 px-4 py-3" onclick="closeAlert()">
+                <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <title>Close</title>
+                    <path d="M14.348 14.849a1 1 0 01-1.414 0L10 11.414l-2.934 2.935a1 1 0 01-1.414-1.415l2.935-2.934-2.935-2.935a1 1 0 011.415-1.414L10 8.586l2.934-2.935a1 1 0 011.414 1.415L11.414 10l2.935 2.934a1 1 0 010 1.415z"/>
+                </svg>
+            </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<script>
+    // Automatically hide the alert after 5 seconds
+    setTimeout(() => {
+        document.getElementById('alert-box')?.remove();
+    }, 5000);
+
+    // Manually close the alert
+    function closeAlert() {
+        document.getElementById('alert-box')?.remove();
+        fetch("{% url 'food:clear_alert' %}", { 
+            method: "POST", 
+            headers: {'X-CSRFToken': '{{ csrf_token }}'} 
+        });
+    }
+</script>
+
+<!-- Items Section -->
+<div class="flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
+  {% for item in items %}
+    <section id="item" class="transform translate-y-full transition-all duration-1000 ease-out" data-item-id="{{ item.id }}">
+      <!-- main con -->
+      <div class="flex justify-center h-full">
+
+        <!-- card con -->
+        <div class="flex flex-col p-6 m-3 space-y-5 rounded-2xl  shadow-2xl space-x-0 md:flex-row md:m-0 md:space-x-20 lg:space-x-[190px] md:space-y-0 md:p-16 bg-white md:mt-5">
+          <!-- image -->
+          <div class="mx-auto w-60">
+            <img class="rounded-2xl duration-100 hover:scale-105" src="{{item.item_image}}" alt="" />
+          </div>
+          <!-- details con -->
+          <div class="flex flex-col w-60 md:text-left md:space-y-5">
+            <!-- details -->
+            <div class="text-lg font-medium text-center mt-5 md:text-2xl max-w-[240px] md:max-w-sm md:mt-0 md:text-left">
+              <span class="text-2xl md:text-3xl">Name</span>: {{item.item_name}}
+            </div>
+            <!-- Description -->
+            <div class="text-lg font-medium text-center mt-5 md:text-2xl max-w-[240px] md:max-w-sm md:mt-0 md:text-left">
+              <span class="text-2xl md:text-3xl">Desc</span>: {{item.item_desc}}
+            </div>
+            <!-- price -->
+            <div class="text-lg font-medium text-center mt-5 md:text-2xl md:text-left">
+              <span class="text-2xl md:text-3xl">Price</span>: {{item.price}}
+            </div>
+            <div class="text-lg font-medium text-center mt-5 md:text-2xl md:text-left">
+              <span class="text-lg md:text-lg">UserName</span>: {{item.user_name}}
+            </div>
+            <!-- button con -->
+            <div class="flex flex-col mt-3 space-y-4 md:space-y-0 md:space-4-0 med:space-x-4 md:flex-row md:space-x-2">
+              <a href="{% url 'food:edit_item' item.id %}">
+                <button class="flex items-center justify-center w-full py-3 px-5 space-x-3 border-2 border-gray-300 rounded-lg shadow-sm hover:bg-opacity-30 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+                  <span> Edit Item</span>
+                </button>
+              </a> 
+              <a href="{% url 'food:delete_item' item.id %}">
+                <button class="flex items-center justify-center w-full py-3 px-5 space-x-3 border-2 border-gray-300 rounded-lg shadow-sm hover:bg-opacity-30 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+                  <span>Delete Item</span>
+                </button>
+              </a>
+            </div>
+          </div>
+          <!-- detail button -->
+          <div>
+            <a href="{% url 'food:detail' item.id %}">
+              <button class="flex items-center w-full justify-center py-3 px-5 space-x-3 border-2 border-gray-300 rounded-lg bg-green-500 shadow-sm hover:bg-opacity-30 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+                <span>Item Details</span>
+              </button>
+            </a>
+          </div>
+
+        </div>
+        
+      </div>
+    </section>
+  {% endfor %}
+</div>
+
+<script>
+    // Add the animation after page load
+    window.addEventListener('load', function() {
+        const items = document.querySelectorAll('[data-item-id]');
+        items.forEach(item => {
+            item.classList.remove('translate-y-full'); // Removes initial off-screen position
+            item.classList.add('translate-y-0'); // Brings the item into view with animation
+        });
+    });
+</script>
+
+{% endblock %}

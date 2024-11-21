@@ -1,0 +1,57 @@
+{% extends 'food/base.html' %}
+
+{% block body %}
+
+<section id="item" class="flex justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+  <!-- main con -->
+  <div class="flex justify-center h-full">
+
+    <!-- card con -->
+    <div
+      id="cardContainer"
+      class="flex flex-col p-6 m-3 space-y-5 rounded-2xl shadow-2xl space-x-0 md:flex-row md:m-0 md:space-x-20 lg:space-x-[200px] md:space-y-0 md:p-16 bg-white md:mt-5 transform scale-0 transition-transform duration-700 ease-out"
+    >
+      <!-- image -->
+      <div class="mx-auto w-60">
+        <img
+          class="rounded-2xl duration-100 hover:scale-105"
+          src="{{item.item_image}}"
+          alt=""
+        />
+      </div>
+      <!-- details con -->
+      <div class="flex flex-col md:text-left md:space-y-5">
+
+        <!-- details -->
+        <div
+          class="text-lg font-medium text-center mt-5 md:text-2xl max-w-[240px] md:max-w-sm md:mt-0 md:text-left"
+        >
+          <span class="text-2xl md:text-3xl">Name</span> : {{item.item_name}}
+        </div>
+        <!-- Description -->
+        <div
+          class="text-lg font-medium text-center mt-5 md:text-2xl max-w-[240px] md:max-w-sm md:mt-0 md:text-left"
+        >
+          <span class="text-2xl md:text-3xl">Desc</span> : {{item.item_desc}}
+        </div>
+        <!-- price -->
+        <div class="text-lg font-medium text-center mt-5 md:text-2xl md:text-left">
+          <span class="text-2xl md:text-3xl">Price</span> {{item.price}}
+        </div>
+
+        <!-- button con -->
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  window.addEventListener('load', function () {
+    const cardContainer = document.getElementById('cardContainer');
+    cardContainer.classList.remove('scale-0'); // Removes the initial scale
+    cardContainer.classList.add('scale-100'); // Applies the animation
+  });
+</script>
+
+{% endblock %}

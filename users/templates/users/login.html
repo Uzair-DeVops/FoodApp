@@ -1,0 +1,40 @@
+{% extends 'food/base.html' %}
+
+{% block body %}
+<div class="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+    <div class="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg transform translate-y-full transition-all duration-1000 ease-out" id="loginForm">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-700">Login</h2>
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div class="relative">
+                <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="relative">
+                <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 transition-all duration-200 ease-in-out transform hover:scale-105">
+                Login
+            </button>
+        </form>
+
+        {% if form.errors %}
+        <div class="mt-4 text-red-600 text-sm">
+            {% for error in form.non_field_errors %}
+                <p class="py-2">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        const loginForm = document.getElementById('loginForm');
+        loginForm.classList.remove('translate-y-full'); // Removes initial off-screen position
+        loginForm.classList.add('translate-y-0'); // Brings it into view with animation
+    });
+</script>
+
+{% endblock %}

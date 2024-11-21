@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'food/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200"> 
+    
+    <!-- Navbar -->
+    <section id="navbar">
+        <div class="flex flex-col bg-gray-800 p-4 space-y-2 items-center md:flex-row justify-between md:p-5">
+            <div class="text-white font-bold text-2xl">     
+              <a href="{% url 'food:index' %}">FoodAPP</a>
+            </div>
+            <div class="flex flex-col items-center space-y-2 sapce-x-0 md:flex-row md:space-y-0 md:space-x-7 text-blue-500">
+                <a href="{% url 'food:create_item' %}">AddItem</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'register' %}">Signup</a>
+                {% if user.is_authenticated %}
+                  <a href="{% url 'logout' %}"> Logout</a>
+                {% else %}
+                  <a href="{% url 'login' %}">Login</a>
+                {% endif %}  
+            </div>
+        </div>
+    </section>
+    <!-- alert -->
+    <!-- {% if messages %}
+      {% for message in messages %}
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded" role="alert">
+        <strong class="font-bold">Success!</strong>
+        <span class="block sm:inline"> {{message}} </span>
+      </div>
+      {%endfor%}
+    {% endif %} -->
+
+    <!-- Main content block -->
+     
+{% block body %}
+{% endblock %}
+
+</body>
+</html>

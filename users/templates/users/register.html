@@ -1,0 +1,48 @@
+{% extends 'food/base.html' %}
+
+{% block body %}
+<div class="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+    <div class="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg transform scale-0 transition-transform duration-700 ease-out" id="signupForm">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-700">Signup</h2>
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div class="relative">
+                <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="relative">
+                <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="relative">
+                <label for="id_password1" class="block text-sm font-medium text-gray-700">Password</label>
+                {{ form.password1 }}
+            </div>
+            <div class="relative">
+                <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                {{ form.password2 }}
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 transition-all duration-200 ease-in-out transform hover:scale-105">
+                Signup
+            </button>
+        </form>
+
+        {% if form.errors %}
+        <div class="mt-4 text-red-600 text-sm">
+            {% for error in form.non_field_errors %}
+                <p class="py-2">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        const signupForm = document.getElementById('signupForm');
+        signupForm.classList.remove('scale-0'); // Removes initial scale
+        signupForm.classList.add('scale-100'); // Brings it into view with animation
+    });
+</script>
+
+{% endblock %}

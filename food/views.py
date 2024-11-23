@@ -41,33 +41,44 @@ class FoodDetail(DetailView):
 
 
 
-def create_item(request):
-    form = ItemForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('food:index')
-    return render(request, 'food/item-form.html', {'form': form})
+# def create_item(request):
+#     form = ItemForm(request.POST or None)
+#     if form.is_valid():
+#         form.save()
+#         return redirect('food:index')
+#     return render(request, 'food/item-form.html', {'form': form})
 from django.urls import reverse_lazy
 
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-class CreateItem(CreateView):
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.urls import reverse_lazy
+
+class CreateItem(LoginRequiredMixin, CreateView):
     model = Item
     fields = ['item_name', 'item_desc', 'price', 'item_image']
     template_name = 'food/item-form.html'
     context_object_name = 'item'
 
     def form_valid(self, form):
-        form.instance.user_name = self.request.user
-        response = super().form_valid(form)
-        # Add a success message
-        messages.success(self.request, f"Item '{form.instance.item_name}' has been successfully added!")
-        return response
+        # Ensure the user is logged in
+        if self.request.user.is_authenticated:
+            form.instance.user_name = self.request.user
+            response = super().form_valid(form)
+            # Add a success message
+            messages.success(self.request, f"Item '{form.instance.item_name}' has been successfully added!")
+            return response
+        else:
+            messages.error(self.request, "You must be logged in to add an item.")
+            return redirect('login')  # Redirect to the login page if unauthenticated
 
     def get_success_url(self):
         # Redirect to the index page
         return reverse_lazy('food:index')
+
 
 
 def edit_item(request,id):
